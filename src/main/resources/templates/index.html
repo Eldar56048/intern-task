@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Главная Страница</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+<noscript><h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websocket relies on Javascript being
+    enabled. Please enable
+    Javascript and reload this page!</h2></noscript>
+
+<header th:insert="blocks/header::header"/>
+
+<section id="countyAdd" class="jumbotron text-center">
+    <div class="container">
+        <form th:action="@{/rooms}" th:object="${room}" method="post">
+            <input type="text" name="name" placeholder="Название комнаты" th:field="*{name}" required class="form-control"><br>
+            <div class="form-group">
+                <label for="country">Select Country</label>
+                <select required class="form-control" id="country" th:field="*{isoCode}">
+                    <option th:each="el: ${countries}" th:value="${el.isoCode}" th:text="${el.countryName}"/>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-success">Добавить</button><br>
+        </form>
+    </div>
+</section>
+<div class="container">
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Room Name</th>
+            <th scope="col">Country</th>
+            <th scope="col">Light</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="el:${rooms}">
+            <th scope="row"><a th:href="@{/rooms/}+${el.id}" th:text="${el.id}"></a></th>
+            <td th:text="${el.name}"/>
+            <td th:text="${el.isoCode}"/>
+            <td th:text="${el.light}"/>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+    <hr>
+    <br>
+</div>
+
+
+<footer th:insert="blocks/footer::footer"></footer>
+</body>
+</html>
