@@ -16,10 +16,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -33,6 +30,12 @@ public class MainController {
 
     @Value("${spring.profiles.active}")
     private String profile;
+
+    @RequestMapping("/helloWorld")
+    public @ResponseBody
+    String greeting() {
+        return "Hello, World";
+    }
 
     @Autowired
     public MainController(RoomService roomService, CountryService countryService) {
@@ -54,6 +57,7 @@ public class MainController {
     public String get(@PathVariable Long id, HttpServletRequest request, Model model) throws IOException, GeoIp2Exception {
         if (!roomService.existsById(id))
             throw new ResourceNotFoundException("Комната №" + id + " не найдено", "room/not-found");
+        System.out.println(request.getRemoteAddr());
         if (!roomService.isIsoCodeEqualsToRoomsIsoCode(id, countryService.getIsoCode(/*request.getRemoteAddr()*/"79.141.162.81")))
             throw new NoAccessException("Вам запрещен вход в Комнату", "room/no-access");
         model.addAttribute("room", RoomFacade.roomToRoomDtoResponse(roomService.getById(id)));

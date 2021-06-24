@@ -14,11 +14,11 @@ import java.util.Locale;
 
 @Service
 public class CountryService {
-    private static String DB_PATH = "C:\\Users\\IBNSINA\\IdeaProjects\\intern\\country\\GeoLite2-Country.mmdb";
     private DatabaseReader database;
 
     public CountryService() throws IOException {
-        File file = new File(DB_PATH);
+        ClassLoader classLoader = getClass().getClassLoader();
+        File file = new File(classLoader.getResource("GeoLite2-Country.mmdb").getFile());
         this.database = new DatabaseReader.Builder(file).build();
     }
 
